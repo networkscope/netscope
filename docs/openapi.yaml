@@ -1,0 +1,303 @@
+openapi: 3.0.3
+info:
+  title: NetScope API
+  version: 0.1.0
+  description: |
+    NetScope exposes a minimal HTTP API for dashboard integration.
+    Base path: /api/v1
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+paths:
+  /api/v1/health:
+    get:
+      summary: Health check
+      operationId: health
+      responses:
+        '200':
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /api/v1/scan:
+    post:
+      summary: Run discovery on a target
+      operationId: scan
+      parameters:
+        - in: query
+          name: target
+          required: true
+          schema:
+            type: string
+          description: IP, domain, or hostname to scan
+      responses:
+        '200':
+          description: Scan completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanResponse'
+        '400':
+          description: Missing or invalid target parameter
+        '500':
+          description: Scan failed
+  /api/v1/assets:
+    get:
+      summary: List current assets
+      operationId: listAssets
+      responses:
+        '200':
+          description: List of assets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Asset'
+  /api/v1/services:
+    get:
+      summary: List current services
+      operationId: listServices
+      responses:
+        '200':
+          description: List of services
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+  /api/v1/findings:
+    get:
+      summary: List current findings
+      operationId: listFindings
+      responses:
+        '200':
+          description: List of findings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Finding'
+  /api/v1/graph:
+    get:
+      summary: List graph nodes and edges
+      operationId: graph
+      responses:
+        '200':
+          description: Graph data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Graph'
+  /api/v1/changes:
+    get:
+      summary: Compare current state against latest snapshot
+      operationId: changes
+      parameters:
+        - in: query
+          name: path
+          required: true
+          schema:
+            type: string
+          description: Path to the database file
+      responses:
+        '200':
+          description: Changes detected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangesResponse'
+        '400':
+          description: Missing path parameter
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        timestamp:
+          type: string
+          format: date-time
+          example: '2026-07-25T06:00:00Z'
+      required:
+        - status
+        - timestamp
+    ScanResponse:
+      type: object
+      properties:
+        target:
+          type: string
+          example: 192.168.1.1
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Asset'
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/Service'
+        findings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Finding'
+        graph:
+          $ref: '#/components/schemas/Graph'
+      required:
+        - target
+        - assets
+        - services
+        - findings
+        - graph
+    Asset:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [host, network, cloud, iot]
+        name:
+          type: string
+        ip:
+          type: string
+        mac:
+          type: string
+        os:
+          type: string
+        vendor:
+          type: string
+        model:
+          type: string
+        serial:
+          type: string
+        asset:
+          type: boolean
+        service:
+          type: boolean
+        criticality:
+          type: integer
+          minimum: 0
+          maximum: 10
+      required:
+        - id
+        - type
+    Service:
+      type: object
+      properties:
+        assetID:
+          type: string
+        port:
+          type: integer
+        transport:
+          type: string
+          enum: [tcp, udp, icmp]
+        protocol:
+          type: string
+          enum: [http, https, ssh, telnet, ftp, smb, dns, dhcp, snmp, mysql, postgres, redis, mongodb, kafka, redis, tls, icmp]
+        name:
+          type: string
+        product:
+          type: string
+        version:
+          type: string
+      required:
+        - assetID
+        - port
+        - transport
+        - protocol
+    Finding:
+      type: object
+      properties:
+        severity:
+          type: string
+          enum: [critical, high, medium, low, info]
+        title:
+          type: string
+        description:
+          type: string
+        assetID:
+          type: string
+        serviceID:
+          type: string
+        cwe:
+          type: string
+        cvss:
+          type: number
+      required:
+        - severity
+        - title
+    Graph:
+      type: object
+      properties:
+        nodes:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              type:
+                type: string
+              label:
+                type: string
+        edges:
+          type: array
+          items:
+            type: object
+            properties:
+              source:
+                type: string
+              target:
+                type: string
+              type:
+                type: string
+    Change:
+      type: object
+      properties:
+        kind:
+          type: string
+          enum: [asset, service, finding]
+        type:
+          type: string
+        id:
+          type: string
+        summary:
+          type: string
+      required:
+        - kind
+        - type
+        - id
+        - summary
+    ChangesResponse:
+      type: object
+      properties:
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Change'
+        summary:
+          $ref: '#/components/schemas/Summary'
+      required:
+        - changes
+        - summary
+    Summary:
+      type: object
+      properties:
+        added:
+          type: integer
+          example: 0
+        removed:
+          type: integer
+          example: 0
+        modified:
+          type: integer
+          example: 0
+      required:
+        - added
+        - removed
+        - modified

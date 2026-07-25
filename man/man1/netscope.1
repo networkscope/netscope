@@ -1,0 +1,52 @@
+.TH NETSCOPE 1 "July 2026" "NetScope 0.1" "User Commands"
+.SH NAME
+netscope \- reconnaissance and security analysis platform
+.SH SYNOPSIS
+.B netscope
+[\fB\,-o\/\fR \fI\,format\/\fR] [\fB\,-v\/\fR] [\fB\,-q\/\fR] \fI\,command\/\fR [\fI\,args\/\fR...]
+.SH DESCRIPTION
+NetScope discovers assets, analyzes services, identifies findings, and maps relationships in authorized environments.
+.SH OPTIONS
+.TP
+.BR \-o ", " \-\-output " \fIfmt\fR"
+Output format: \fBtext\fR, \fBjson\fR, or \fBcsv\fR (default: text)
+.TP
+.BR \-v ", " \-\-verbose
+Enable verbose output
+.TP
+.BR \-q ", " \-\-quiet
+Suppress non-essential output
+.TP
+.BR \-h ", " \-\-help
+Show help for a command
+.SH COMMANDS
+.TP
+.B scan \fItarget\fR
+Scan a target for assets and services. Optionally save results with \fB\-\-save\fR.
+.TP
+.B changes \fIpath\fR
+Compare current state against the latest snapshot in the database.
+.SH EXAMPLES
+.TP
+Scan a target and display text output:
+.B netcope scan 192.168.1.1
+.TP
+Scan and save to SQLite:
+.B netcope scan example.com \-\-save assessment.db
+.TP
+Show changes since last snapshots:
+.B netcope changes assessment.db
+.TP
+JSON output:
+.B netcope scan 10.0.0.1 -o json
+.SH FILES
+.TP
+.I assessment.db
+SQLite database used with \fB\-\-save\fR.
+.SH SEE ALSO
+.BR nmap (1),
+.BR sqlite3 (1)
+.SH AUTHOR
+NetScope contributors.
+.SH LICENSE
+GNU General Public License v3.0.

@@ -1,0 +1,48 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Dependency directories
+vendor/
+
+# Go workspace file
+go.work
+
+# Build artifacts
+assessment.db
+*.db
+netscope
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# AI Agent Exclusions
+.cursor/
+.claude_rig/
+.claude_summary
+.claude/
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+.env.*.local

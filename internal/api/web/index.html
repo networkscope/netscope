@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetScope</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        h1 { font-size: 1.25rem; }
+        input, button { margin: 0.25rem 0; }
+        .section { margin: 1rem 0; }
+        .count { font-weight: bold; }
+        .error { color: #c00; }
+    </style>
+</head>
+<body>
+    <h1>NetScope</h1>
+    <div class="section">
+        <input id="target" placeholder="Target (IP, domain, hostname)" />
+        <button id="scan">Scan</button>
+    </div>
+    <div class="section" id="status"></div>
+    <div class="section" id="assets"></div>
+    <div class="section" id="services"></div>
+    <div class="section" id="findings"></div>
+    <div class="section" id="graph"></div>
+
+    <script src="main.ts"></script>
+</body>
+</html>
