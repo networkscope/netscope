@@ -100,11 +100,10 @@ jobs:
           cache: false
       - name: Install GoReleaser
         working-directory: ${{ github.workspace }}
-        run: |
-          curl -fSL -o goreleaser https://github.com/goreleaser/goreleaser/releases/download/v2.5.0/goreleaser_linux_amd64
-          chmod +x goreleaser
+        run: go install github.com/goreleaser/goreleaser/v2@v2.5.0
       - name: Run GoReleaser
         working-directory: ${{ github.workspace }}
-        run: ./goreleaser release --clean
+        run: |
+          $(go env GOPATH)/bin/goreleaser release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
