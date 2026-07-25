@@ -104,6 +104,6 @@ jobs:
       - name: Run GoReleaser
         working-directory: ${{ github.workspace }}
         run: |
-          $(go env GOPATH)/bin/goreleaser release --clean
+          $(go env GOPATH)/bin/goreleaser release --clean --snapshot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
