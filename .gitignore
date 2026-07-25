@@ -20,7 +20,7 @@ go.work
 # Build artifacts
 assessment.db
 *.db
-netscope
+/netscope
 
 # IDE
 .vscode/
