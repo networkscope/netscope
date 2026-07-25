@@ -14,6 +14,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.22'
+          cache: false
       - run: go mod tidy
       - run: go build ./...
       - run: go vet ./...
@@ -28,9 +29,12 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.22'
+          cache: false
       - name: Build Linux amd64
+        working-directory: ${{ github.workspace }}
         run: GOOS=linux GOARCH=amd64 go build -o netscope-linux-amd64 ./cmd/netscope
       - name: Build Linux arm64
+        working-directory: ${{ github.workspace }}
         run: GOOS=linux GOARCH=arm64 go build -o netscope-linux-arm64 ./cmd/netscope
       - uses: actions/upload-artifact@v4
         with:
@@ -47,9 +51,12 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.22'
+          cache: false
       - name: Build Windows amd64
+        working-directory: ${{ github.workspace }}
         run: go build -o netscope-windows-amd64.exe ./cmd/netscope
       - name: Build Windows arm64
+        working-directory: ${{ github.workspace }}
         run: go build -o netscope-windows-arm64.exe ./cmd/netscope
       - uses: actions/upload-artifact@v4
         with:
@@ -66,9 +73,12 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.22'
+          cache: false
       - name: Build macOS amd64
+        working-directory: ${{ github.workspace }}
         run: GOOS=darwin GOARCH=amd64 go build -o netscope-darwin-amd64 ./cmd/netscope
       - name: Build macOS arm64
+        working-directory: ${{ github.workspace }}
         run: GOOS=darwin GOARCH=arm64 go build -o netscope-darwin-arm64 ./cmd/netscope
       - uses: actions/upload-artifact@v4
         with:
@@ -87,10 +97,13 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.22'
+          cache: false
       - name: Install GoReleaser
+        working-directory: ${{ github.workspace }}
         run: |
           curl -sL https://github.com/goreleaser/goreleaser/releases/download/v2.5.0/goreleaser_linux_amd64.tar.gz | tar xz
       - name: Run GoReleaser
+        working-directory: ${{ github.workspace }}
         run: ./goreleaser release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
