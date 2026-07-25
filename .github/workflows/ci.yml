@@ -14,6 +14,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.22'
+          cache: false
       - run: go mod tidy
       - run: go build ./...
       - run: go vet ./...
@@ -28,6 +29,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.22'
+          cache: false
       - name: Build Linux amd64
         run: GOOS=linux GOARCH=amd64 go build -o netscope-linux-amd64 ./cmd/netscope
       - name: Build Linux arm64
@@ -47,6 +49,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.22'
+          cache: false
       - name: Build Windows amd64
         run: go build -o netscope-windows-amd64.exe ./cmd/netscope
       - name: Build Windows arm64
@@ -66,6 +69,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.22'
+          cache: false
       - name: Build macOS amd64
         run: GOOS=darwin GOARCH=amd64 go build -o netscope-darwin-amd64 ./cmd/netscope
       - name: Build macOS arm64
@@ -87,6 +91,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.22'
+          cache: false
       - name: Install GoReleaser
         run: |
           curl -sL https://github.com/goreleaser/goreleaser/releases/download/v2.5.0/goreleaser_linux_amd64.tar.gz | tar xz
