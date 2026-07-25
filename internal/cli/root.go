@@ -11,6 +11,7 @@ var (
 	verbose bool
 	quiet   bool
 	format  string
+	version string
 )
 
 var rootCmd = &cobra.Command{
@@ -27,6 +28,14 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "enable verbose output")
 	rootCmd.PersistentFlags().BoolVarP(&quiet, "quiet", "q", false, "suppress non-essential output")
 	rootCmd.PersistentFlags().StringVarP(&format, "output", "o", "text", "output format: text, json, or csv")
+	if version != "" {
+		rootCmd.Version = version
+		rootCmd.SetVersionTemplate("Netscope version {{.Version}}\n")
+	}
+	rootCmd.PersistentPreRunE = func(cmd *cobra.Command, args []string) error {
+		checkForUpdate()
+		return nil
+	}
 }
 
 func Execute() error {
