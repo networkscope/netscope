@@ -21,14 +21,14 @@ jobs:
       - name: Generate timestamp tag
         id: tag
         run: |
-          TAG="v$(date +%Y.%m.%d.%H%M)"
+          TAG="v$(date +%Y).$(date +%-m).$(date +%-d)-$(date +%H%M)"
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
       - name: Create Git Tag
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git tag -a "${{ steps.tag.outputs.tag }}" -m "Release ${{ steps.tag.outputs.tag }}"
-          git push origin "${{ steps.tag.outputs.tag }}"
+          git tag -a "${{ steps.tag.outputs.tag }}" -m "Release ${{ steps.tag.outputs.tag }}" -f
+          git push origin "${{ steps.tag.outputs.tag }}" -f
       - uses: goreleaser/goreleaser-action@v6
         with:
           version: v2.5.0
